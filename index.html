@@ -4,20 +4,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QAVORA AI</title>
+<title>QAVORA AI | Rockstar Technologies</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#080914;color:white;font-family:Arial,sans-serif}
 header{padding:20px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #292943}
-.logo{font-size:25px;font-weight:bold;color:#b69aff;letter-spacing:2px}
-nav a{color:#ccc;text-decoration:none;margin-left:18px;font-size:14px}
-.hero{text-align:center;padding:90px 20px 65px}
+.logo{font-size:24px;font-weight:bold;color:#b69aff;letter-spacing:2px}
+nav a{color:#ccc;text-decoration:none;margin-left:15px;font-size:14px}
+.hero{text-align:center;padding:75px 20px 55px}
 .tag{color:#c4b5fd;border:1px solid #7051aa;border-radius:30px;padding:10px 18px;display:inline-block;margin-bottom:25px}
 h1{font-size:clamp(38px,7vw,65px);line-height:1.2;margin-bottom:20px}
 .gradient{background:linear-gradient(90deg,#a78bfa,#e879f9);background-clip:text;color:transparent}
-.hero p{color:#aaa;line-height:1.8;max-width:600px;margin:auto}
-.search{max-width:650px;margin:35px auto;background:#17172c;border:1px solid #554477;padding:12px;border-radius:14px;display:flex;gap:10px}
-.search input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:white;padding:10px}
+.hero p{color:#aaa;line-height:1.8;max-width:600px;margin:12px auto}
+.search{max-width:650px;margin:30px auto;background:#17172c;border:1px solid #554477;padding:12px;border-radius:14px;display:flex;gap:10px}
+input{min-width:0;flex:1;background:#17172c;color:white;border:1px solid #554477;padding:13px;border-radius:9px;outline:none}
 button{background:#895cf6;color:white;border:0;padding:12px 20px;border-radius:9px;cursor:pointer}
 .section{padding:55px 7%}
 .section h2{text-align:center;font-size:30px;margin-bottom:12px}
@@ -28,8 +28,13 @@ button{background:#895cf6;color:white;border:0;padding:12px 20px;border-radius:9
 .emoji{font-size:30px;margin-bottom:15px}
 .tool h3{margin-bottom:10px}
 .tool p{color:#aaa;font-size:14px;line-height:1.6}
+#chat{max-width:750px;margin:20px auto 60px;padding:25px;background:#141529;border:1px solid #554477;border-radius:16px}
+#chat h2{text-align:center;color:#c4b5fd;margin-bottom:18px}
+#messages{min-height:100px;max-height:350px;overflow-y:auto;margin-bottom:15px}
+.msg{padding:12px;margin:9px 0;border-radius:10px;background:#22223c;line-height:1.5;overflow-wrap:anywhere}
+#chat-form{display:flex;gap:10px}
 footer{text-align:center;padding:30px;color:#888;border-top:1px solid #292943;line-height:2}
-@media(max-width:600px){header{padding:18px 5%}nav a{margin-left:9px;font-size:12px}}
+@media(max-width:600px){header{padding:18px 5%;flex-wrap:wrap;gap:12px}nav a{margin-left:8px;font-size:12px}.search{flex-direction:column}#chat-form{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -38,9 +43,11 @@ footer{text-align:center;padding:30px;color:#888;border-top:1px solid #292943;li
 <nav>
 <a href="#home">Home</a>
 <a href="#tools">Tools</a>
+<a href="#chat">Chat</a>
 <a href="#about">About</a>
 </nav>
 </header>
+
 <section class="hero" id="home">
 <div class="tag">✦ Your Intelligent AI Workspace</div>
 <h1>Think Beyond.<br><span class="gradient">Create Without Limits.</span></h1>
@@ -51,6 +58,7 @@ footer{text-align:center;padding:30px;color:#888;border-top:1px solid #292943;li
 </div>
 <p id="message"></p>
 </section>
+
 <section class="section" id="tools">
 <h2>Explore QAVORA</h2>
 <p class="sub">Powerful tools. One intelligent workspace.</p>
@@ -65,33 +73,61 @@ footer{text-align:center;padding:30px;color:#888;border-top:1px solid #292943;li
 <div class="tool"><div class="emoji">🤖</div><h3>AI Agents</h3><p>Plan intelligent workflows.</p></div>
 </div>
 </section>
+
+<section class="section" id="chat">
+<h2>QAVORA AI Chat</h2>
+<p class="sub">Your ideas start here.</p>
+<div id="messages" aria-live="polite">
+<div class="msg">QAVORA AI: Welcome! Send a message to try the chat demo.</div>
+</div>
+<form id="chat-form">
+<input id="chat-input" placeholder="Type your message..." autocomplete="off">
+<button type="submit">Send</button>
+</form>
+</section>
+
 <section class="section" id="about">
 <h2>Our Vision</h2>
 <p class="sub">Turning scattered information into useful knowledge.</p>
 </section>
+
 <footer>
-<strong>QAVORA AI</strong><br>
-Think Beyond. Create Without Limits.<br>
-Founder & CEO — Kafiya<br>
+<strong>ROCKSTAR TECHNOLOGIES</strong><br>
+Innovating Beyond Limits.<br>
+QAVORA AI — Think Beyond. Create Without Limits.<br>
+Founder &amp; CEO — Kafiya<br>
 © 2026 QAVORA AI
 </footer>
+
 <script>
 function explore(){
 const q=document.getElementById("question").value.trim();
-document.getElementById("message").textContent=q?"AI connection will be added in the next development step.":"Please enter your question.";
+document.getElementById("message").textContent=q
+?"Your idea is ready! Open QAVORA AI Chat below to try the demo."
+:"Please enter your question.";
+if(q) document.getElementById("chat").scrollIntoView({behavior:"smooth"});
 }
-  
 
+document.getElementById("chat-form").addEventListener("submit",function(event){
+event.preventDefault();
+const input=document.getElementById("chat-input");
+const messages=document.getElementById("messages");
+const question=input.value.trim();
+if(!question)return;
+
+const user=document.createElement("div");
+user.className="msg";
+user.textContent="You: "+question;
+messages.appendChild(user);
+
+const reply=document.createElement("div");
+reply.className="msg";
+reply.textContent="QAVORA AI: Thanks for your message! This is a demo. Real AI connection is coming soon.";
+messages.appendChild(reply);
+
+input.value="";
+messages.scrollTop=messages.scrollHeight;
+});
 </script>
-
-<section id="qavora-chat" style="background:...">
-<h2>QAVORA AI Chat</h2>
-<input id="chat-input" placeholder="...">
-<button onclick="alert('QAVORA Chat is working')">...</button>
-</section>
-
 </body>
 </html>
-  
-
-
