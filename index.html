@@ -147,6 +147,41 @@ async function logIn(){
   msg.textContent = error ? error.message : "Login successful!";
 }
 <script>
+  async function signUp(){
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const msg = document.getElementById("auth-message");
+
+  if(!email || !password){
+    msg.textContent = "Please enter email and password.";
+    return;
+  }
+
+  const {error} = await window.qavoraSupabase.auth.signUp({
+    email: email,
+    password: password
+  });
+
+  msg.textContent = error ? error.message : "Signup request sent! Check your email.";
+}
+
+async function logIn(){
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const msg = document.getElementById("auth-message");
+
+  if(!email || !password){
+    msg.textContent = "Please enter email and password.";
+    return;
+  }
+
+  const {error} = await window.qavoraSupabase.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  msg.textContent = error ? error.message : "Login successful!";
+}
 function explore(){
 const q=document.getElementById("question").value.trim();
 document.getElementById("message").textContent=q
