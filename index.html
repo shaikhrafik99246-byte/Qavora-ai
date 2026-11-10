@@ -49,7 +49,18 @@ footer{text-align:center;padding:30px;color:#888;border-top:1px solid #292943;li
 <a href="#about">About</a>
 </nav>
 </header>
+<section class="section" id="auth">
+<h2>QAVORA Account</h2>
+<p class="sub">Create your account or log in.</p>
 
+<div style="max-width:450px;margin:auto;background:#141529;padding:25px;border-radius:15px;border:1px solid #554477">
+<input id="email" type="email" placeholder="Enter your email" style="width:100%;margin-bottom:12px">
+<input id="password" type="password" placeholder="Create a password" style="width:100%;margin-bottom:12px">
+<button onclick="signUp()" style="width:100%;margin-bottom:10px">Sign Up</button>
+<button onclick="logIn()" style="width:100%">Log In</button>
+<p id="auth-message" style="margin-top:15px;color:#c4b5fd"></p>
+</div>
+</section>
 <section class="hero" id="home">
 <div class="tag">✦ Your Intelligent AI Workspace</div>
 <h1>Think Beyond.<br><span class="gradient">Create Without Limits.</span></h1>
