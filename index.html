@@ -104,4 +104,81 @@ footer{text-align:center;padding:30px;color:#888;border-top:1px solid #292943;li
 <p class="sub">Turning scattered information into useful knowledge.</p>
 </section>
 
+<footer>
+QAVORA AI — Think Beyond. Create Without Limits.<br>
+Founder &amp; CEO — Kafiya<br>
+© 2026 QAVORA AI
+</footer>
+
+<script>
+async function signUp(){
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const msg = document.getElementById("auth-message");
+
+  if(!email || !password){
+    msg.textContent = "Please enter email and password.";
+    return;
+  }
+
+  if(!window.qavoraSupabase){
+    msg.textContent = "Connection error. Please refresh.";
+    return;
+  }
+
+  const {error} = await window.qavoraSupabase.auth.signUp({email,password});
+  msg.textContent = error ? error.message : "Signup request sent! Check your email.";
+}
+
+async function logIn(){
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const msg = document.getElementById("auth-message");
+
+  if(!email || !password){
+    msg.textContent = "Please enter email and password.";
+    return;
+  }
+
+  if(!window.qavoraSupabase){
+    msg.textContent = "Connection error. Please refresh.";
+    return;
+  }
+
+  const {error} = await window.qavoraSupabase.auth.signInWithPassword({email,password});
+  msg.textContent = error ? error.message : "Login successful!";
+}
+
+function explore(){
+  const q=document.getElementById("question").value.trim();
+  document.getElementById("message").textContent=q
+    ? "Your idea is ready! Open QAVORA AI Chat below to try the demo."
+    : "Please enter your question.";
+  if(q) document.getElementById("chat").scrollIntoView({behavior:"smooth"});
+}
+
+document.getElementById("chat-form").addEventListener("submit",function(event){
+  event.preventDefault();
+  const input=document.getElementById("chat-input");
+  const messages=document.getElementById("messages");
+  const question=input.value.trim();
+  if(!question)return;
+
+  const user=document.createElement("div");
+  user.className="msg";
+  user.textContent="You: "+question;
+  messages.appendChild(user);
+
+  const reply=document.createElement("div");
+  reply.className="msg";
+  reply.textContent="QAVORA AI: Thanks for your message! This is a demo. Real AI connection is coming soon.";
+  messages.appendChild(reply);
+
+  input.value="";
+  messages.scrollTop=messages.scrollHeight;
+});
+</script>
+</body>
+</html>
+
 
