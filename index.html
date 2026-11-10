@@ -111,7 +111,41 @@ QAVORA AI — Think Beyond. Create Without Limits.<br>
 Founder &amp; CEO — Kafiya<br>
 © 2026 QAVORA AI
 </footer>
+async function signUp(){
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const msg = document.getElementById("auth-message");
 
+  if(!email || !password){
+    msg.textContent = "Please enter email and password.";
+    return;
+  }
+
+  const {error} = await window.qavoraSupabase.auth.signUp({
+    email: email,
+    password: password
+  });
+
+  msg.textContent = error ? error.message : "Signup successful! Check your email.";
+}
+
+async function logIn(){
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const msg = document.getElementById("auth-message");
+
+  if(!email || !password){
+    msg.textContent = "Please enter email and password.";
+    return;
+  }
+
+  const {error} = await window.qavoraSupabase.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  msg.textContent = error ? error.message : "Login successful!";
+}
 <script>
 function explore(){
 const q=document.getElementById("question").value.trim();
