@@ -1,4 +1,4 @@
-const SUPABASE_URL = 
+const SUPABASE_URL = sb_publishable_D1rn0omiDS1oHm1MK91mOw_SSerghaZ
 const SUPABASE_KEY = 
 
 window.qavoraSupabase = window.supabase.createClient(
