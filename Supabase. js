@@ -1,5 +1,5 @@
-const SUPABASE_URL = 
-const SUPABASE_KEY = sb_publishable_D1rn0omiDS1oHm1MK91mOw_SSerghaZ
+const SUPABASE_URL = "YAHAN_PROJECT_URL";
+const SUPABASE_KEY = "YAHAN_PUBLISHABLE_KEY";
 
 window.qavoraSupabase = window.supabase.createClient(
   SUPABASE_URL,
