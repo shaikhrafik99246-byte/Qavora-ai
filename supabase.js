@@ -1,4 +1,4 @@
-const SUPABASE_URL = "
+const SUPABASE_URL = "qdbvoiefuosrzsigykue";
 const SUPABASE_KEY = "
 
 window.qavoraSupabase = window.supabase.createClient(
