@@ -1,5 +1,5 @@
-const SUPABASE_URL = https://qdbvoiefuosrzsigykue.supabase.co/rest/v1/
-const SUPABASE_KEY = sb_publishable_D1rn0omiDS1oHm1MK91mOw_SSerghaZ
+const SUPABASE_URL = "PASTE_PROJECT_URL_HERE";
+const SUPABASE_KEY = "PASTE_PUBLISHABLE_KEY_HERE";
 
 window.qavoraSupabase = window.supabase.createClient(
   SUPABASE_URL,
