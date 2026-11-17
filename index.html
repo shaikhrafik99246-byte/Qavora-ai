@@ -157,26 +157,6 @@ function explore(){
   if(q) document.getElementById("chat").scrollIntoView({behavior:"smooth"});
 }
 
-document.getElementById("chat-form").addEventListener("submit",function(event){
-  event.preventDefault();
-  const input=document.getElementById("chat-input");
-  const messages=document.getElementById("messages");
-  const question=input.value.trim();
-  if(!question)return;
-
-  const user=document.createElement("div");
-  user.className="msg";
-  user.textContent="You: "+question;
-  messages.appendChild(user);
-
-  const reply=document.createElement("div");
-  reply.className="msg";
-  reply.textContent="QAVORA AI: Thanks for your message! This is a demo. Real AI connection is coming soon.";
-  messages.appendChild(reply);
-
-  input.value="";
-  messages.scrollTop=messages.scrollHeight;
-});
 </script>
 </body>
 </html>
