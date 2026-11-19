@@ -189,15 +189,11 @@ document.getElementById("chat-form").addEventListener("submit", async function(e
   try {
     const { data, error } =
       await window.qavoraSupabase.functions.invoke(
-      
-        {
-          body: { message: question }
-        }
-      );
-
-    if (error) {
-      throw error;
-    }
+  "bright-service",
+  {
+    body: { message: question }
+  }
+);
 
     if (data?.error) {
       addMessage("QAVORA: " + (data.provider_message || data.error));
