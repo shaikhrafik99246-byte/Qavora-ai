@@ -6,4 +6,4 @@ window.qavoraSupabase = window.supabase.createClient(
   SUPABASE_KEY
 );
 
-console.log("QAVORA connected!");
+console.log("QAVORA connected!"); 
