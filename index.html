@@ -205,7 +205,20 @@ document.getElementById("chat-form").addEventListener("submit", async function(e
       addMessage("QAVORA AI: " + data.answer);
     }
 
+} catch (error) {
+  console.error("QAVORA Chat Error:", error);
 
+  let details = error.message || "Unknown error";
+
+  if (error.context) {
+    try {
+      const response = await error.context.clone().text();
+      if (response) details += " | " + response;
+    } catch (e) {}
+  }
+
+  addMessage("QAVORA Error: " + details);
+    }
   
   
 
