@@ -194,7 +194,9 @@ document.getElementById("chat-form").addEventListener("submit", async function(e
     body: { message: question }
   }
 );
-
+if (error) {
+  throw error;
+}
     if (data?.error) {
       addMessage("QAVORA: " + (data.provider_message || data.error));
     } else {
