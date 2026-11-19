@@ -205,13 +205,9 @@ document.getElementById("chat-form").addEventListener("submit", async function(e
       addMessage("QAVORA AI: " + data.answer);
     }
 
-  } catch (error) {
-    console.error("QAVORA Chat Error:", error);
-    addMessage("QAVORA: Sorry, something went wrong. Please try again.");
-  } finally {
-    sendButton.disabled = false;
-    sendButton.textContent = "Send";
-  }
+
+  
+  
 
   });
   
