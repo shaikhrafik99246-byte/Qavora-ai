@@ -158,6 +158,62 @@ function explore(){
 }
 
 
+document.getElementById("chat-form").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const input = document.getElementById("chat-input");
+  const messages = document.getElementById("messages");
+  const question = input.value.trim();
+  const sendButton = this.querySelector("button");
+
+  if (!question) return;
+
+  function addMessage(text) {
+    const msg = document.createElement("div");
+    msg.className = "msg";
+    msg.textContent = text;
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  if (!window.qavoraSupabase) {
+    addMessage("QAVORA: Connection error. Please refresh.");
+    return;
+  }
+
+  addMessage("You: " + question);
+  input.value = "";
+  sendButton.disabled = true;
+  sendButton.textContent = "Thinking...";
+
+  try {
+    const { data, error } =
+      await window.qavoraSupabase.functions.invoke(
+        "dynamic-worker",
+        {
+          body: { message: question }
+        }
+      );
+
+    if (error) {
+      throw error;
+    }
+
+    if (data?.error) {
+      addMessage("QAVORA: " + (data.provider_message || data.error));
+    } else {
+      addMessage("QAVORA AI: " + data.answer);
+    }
+
+  } catch (error) {
+    console.error("QAVORA Chat Error:", error);
+    addMessage("QAVORA: Sorry, something went wrong. Please try again.");
+  } finally {
+    sendButton.disabled = false;
+    sendButton.textContent = "Send";
+  }
+});
+                                                      
 });
   
 </script>
