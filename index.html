@@ -157,45 +157,7 @@ function explore(){
   if(q) document.getElementById("chat").scrollIntoView({behavior:"smooth"});
 }
 
-document.getElementById("chat-form").addEventListener("submit", function(event) {
-  event.preventDefault();
 
-  const input = document.getElementById("chat-input");
-  const messages = document.getElementById("messages");
-  const question = input.value.trim();
-
-  if (!question) return;
-
-  function addMessage(text) {
-    const msg = document.createElement("div");
-    msg.className = "msg";
-    msg.textContent = text;
-    messages.appendChild(msg);
-  }
-
-  addMessage("You: " + question);
-
-  const q = question.toLowerCase();
-  let answer;
-
-  if (q.includes("hello") || q.includes("hi") || q.includes("salam")) {
-    answer = "Hello! Welcome to QAVORA AI. How can I help you?";
-  } else if (q.includes("your name") || q.includes("who are you")) {
-    answer = "I am QAVORA AI, your intelligent workspace.";
-  } else if (q.includes("help")) {
-    answer = "I can help you explore ideas, learn topics, write drafts and understand problems.";
-  } else if (q.includes("what can you do")) {
-    answer = "I can help with research, writing, coding and problem solving in demo mode.";
-  } else if (q.includes("thank")) {
-    answer = "You're welcome! Keep exploring with QAVORA AI.";
-  } else {
-    answer = "Thanks for your question! This is QAVORA's free demo mode. Real AI answers need an AI connection.";
-  }
-
-  addMessage("QAVORA AI: " + answer);
-
-  input.value = "";
-  messages.scrollTop = messages.scrollHeight;
 });
   
 </script>
