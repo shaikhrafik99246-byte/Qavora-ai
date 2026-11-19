@@ -189,7 +189,7 @@ document.getElementById("chat-form").addEventListener("submit", async function(e
   try {
     const { data, error } =
       await window.qavoraSupabase.functions.invoke(
-  "bright-service",
+  "smooth-task",
   {
     body: { message: question }
   }
