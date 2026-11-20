@@ -1,1 +1,444 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QAVORA AI | Think Beyond</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<style>
+:root{
+  --bg:#090914;
+  --panel:#111120;
+  --panel2:#17172a;
+  --border:#292940;
+  --text:#f5f4ff;
+  --muted:#9999b5;
+  --purple:#8b5cf6;
+  --blue:#5865f2;
+  --cyan:#36d9e8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  min-height:100vh;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:255px;
+  background:#0e0e1b;
+  border-right:1px solid var(--border);
+  padding:24px 17px;
+  display:flex;
+  flex-direction:column;
+  flex-shrink:0;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin-bottom:35px;
+}
+.logo{
+  width:42px;height:42px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#a855f7,#5358e8,#24c6dc);
+  display:grid;place-items:center;
+  font-size:24px;font-weight:900;
+  box-shadow:0 0 25px #7955f555;
+}
+.brand h2{font-size:20px;letter-spacing:1px}
+.brand small{color:var(--cyan);font-size:10px;letter-spacing:3px}
+.nav-title{
+  color:#73738e;font-size:10px;
+  letter-spacing:2px;margin:19px 10px 10px;
+}
+.nav button{
+  width:100%;border:0;background:transparent;
+  color:#b7b7cd;text-align:left;
+  padding:12px;border-radius:10px;
+  margin:2px 0;font-size:13px;
+}
+.nav button:hover,.nav button.active{
+  background:#24213e;color:white;
+}
+.nav button.active{border-left:3px solid var(--purple)}
+.sidebar-bottom{margin-top:auto}
+.account{
+  border:1px solid var(--border);
+  border-radius:13px;padding:13px;
+  margin-top:18px;
+}
+.account strong{font-size:13px}
+.account p{color:var(--muted);font-size:11px;margin:6px 0}
+.account button{
+  background:#252342;border:0;color:white;
+  padding:9px;border-radius:8px;width:100%;margin-top:7px;
+}
+.main{flex:1;min-width:0;padding:25px 4% 50px}
+.topbar{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:55px;
+}
+.topbar p{color:var(--muted);font-size:13px}
+.top-actions{display:flex;gap:10px;align-items:center}
+.top-actions button{
+  border:1px solid var(--border);background:var(--panel);
+  color:white;border-radius:10px;padding:10px 14px;
+}
+.hero{text-align:center;max-width:800px;margin:0 auto 50px}
+.pill{
+  display:inline-block;padding:8px 14px;
+  border:1px solid #55418c;border-radius:30px;
+  color:#c7aaff;background:#211938;
+  font-size:11px;margin-bottom:22px;
+}
+.hero h1{
+  font-size:clamp(38px,6vw,66px);
+  line-height:1.08;letter-spacing:-2px;
+}
+.gradient{
+  background:linear-gradient(90deg,#b58aff,#6f9bff,#49d8e7);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.hero>p{
+  color:var(--muted);line-height:1.8;
+  margin:18px auto;max-width:570px;font-size:14px;
+}
+.search-box{
+  max-width:680px;margin:30px auto 0;
+  display:flex;gap:10px;padding:9px;
+  border:1px solid #48416c;background:#141426;
+  border-radius:17px;box-shadow:0 12px 50px #0005;
+}
+.search-box input{
+  flex:1;min-width:0;background:transparent;
+  border:0;outline:0;color:white;padding:12px;
+}
+.primary{
+  background:linear-gradient(110deg,#8b5cf6,#5367ed);
+  color:white;border:0;border-radius:11px;
+  padding:13px 21px;font-weight:700;
+}
+.section-head{
+  display:flex;justify-content:space-between;
+  align-items:center;margin:35px 0 18px;
+}
+.section-head h2{font-size:19px}
+.section-head p{font-size:12px;color:var(--muted);margin-top:5px}
+.tools{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:15px;
+}
+.tool{
+  background:linear-gradient(145deg,#17172a,#10101d);
+  border:1px solid var(--border);
+  padding:19px;border-radius:15px;
+  transition:.2s;cursor:pointer;min-height:145px;
+}
+.tool:hover{
+  transform:translateY(-3px);
+  border-color:#7960c8;
+  background:#1c1a32;
+}
+.tool-icon{
+  width:39px;height:39px;
+  display:grid;place-items:center;
+  border-radius:12px;background:#292345;
+  font-size:20px;margin-bottom:15px;
+}
+.tool h3{font-size:14px;margin-bottom:7px}
+.tool p{color:var(--muted);font-size:11px;line-height:1.6}
+.tool .status{font-size:9px;color:#bda4ff;margin-top:12px}
+.workspace{
+  display:none;max-width:850px;margin:auto;
+}
+.workspace.show{display:block}
+.workspace h2{font-size:25px;margin-bottom:8px}
+.workspace>p{color:var(--muted);font-size:13px;margin-bottom:20px}
+.chat-area{
+  min-height:250px;max-height:440px;overflow:auto;
+  background:#111120;border:1px solid var(--border);
+  border-radius:15px;padding:20px;margin-bottom:15px;
+}
+.message{
+  padding:13px 15px;border-radius:12px;
+  margin-bottom:12px;line-height:1.7;
+  font-size:13px;white-space:pre-wrap;
+}
+.user{background:#29234b;margin-left:12%;text-align:right}
+.ai{background:#1b1b30;margin-right:12%}
+.chat-controls{display:flex;gap:10px}
+.chat-controls input{
+  flex:1;min-width:0;background:#151526;
+  border:1px solid var(--border);color:white;
+  padding:14px;border-radius:12px;outline:0;
+}
+.back{
+  background:#22213a;color:white;border:0;
+  padding:10px 15px;border-radius:9px;margin-bottom:22px;
+}
+footer{
+  text-align:center;color:#77778e;
+  font-size:11px;margin-top:55px;
+  border-top:1px solid var(--border);padding:25px 0;
+}
+@media(max-width:850px){
+  .sidebar{width:210px}
+  .tools{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+  .app{display:block}
+  .sidebar{width:100%;padding:14px}
+  .brand{margin-bottom:12px}
+  .nav{display:flex;overflow-x:auto;gap:5px}
+  .nav-title,.sidebar-bottom{display:none}
+  .nav button{white-space:nowrap;width:auto;padding:10px}
+  .main{padding:20px 15px}
+  .topbar{margin-bottom:40px}
+  .tools{grid-template-columns:1fr 1fr;gap:9px}
+  .tool{padding:13px;min-height:150px}
+  .search-box{flex-direction:column}
+  .search-box .primary{width:100%}
+}
+@media(max-width:360px){
+  .tools{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<aside class="sidebar">
+  <div class="brand">
+    <div class="logo">Q</div>
+    <div>
+      <h2>QAVORA</h2>
+      <small>ARTIFICIAL INTELLIGENCE</small>
+    </div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-title">WORKSPACE</div>
+    <button class="active" onclick="showHome()">⌂ Home</button>
+    <button onclick="openChat()">✦ AI Chat</button>
+    <button onclick="showTools()">▦ Explore Tools</button>
+  </div>
+
+  <div class="nav">
+    <div class="nav-title">YOUR SPACE</div>
+    <button onclick="openFeature('Knowledge Library')">▤ Knowledge Library</button>
+    <button onclick="openFeature('Projects')">◫ Projects</button>
+    <button onclick="openFeature('AI Agents')">◇ AI Agents</button>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="account">
+      <strong>QAVORA Account</strong>
+      <p id="accountStatus">Sign in to access your workspace.</p>
+      <button id="googleButton" onclick="googleLogin()">Continue with Google</button>
+      <button id="logoutButton" onclick="logout()" style="display:none">Sign Out</button>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <strong>QAVORA AI</strong>
+      <p>Your intelligent workspace</p>
+    </div>
+    <div class="top-actions">
+      <button onclick="showTools()">Explore</button>
+    </div>
+  </div>
+
+  <section id="home">
+    <div class="hero">
+      <div class="pill">✦ YOUR NEXT-GENERATION AI WORKSPACE</div>
+      <h1>Think Beyond.<br><span class="gradient">Create Without Limits.</span></h1>
+      <p>
+        Research, analyze, create and solve problems
+        with one intelligent workspace.
+      </p>
+
+      <div class="search-box">
+        <input id="mainQuestion" placeholder="Ask anything or explore an idea..."
+        onkeydown="if(event.key==='Enter')askMain()">
+        <button class="primary" onclick="askMain()">Explore →</button>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <div>
+        <h2>Explore QAVORA</h2>
+        <p>Powerful tools. One intelligent workspace.</p>
+      </div>
+    </div>
+
+    <div class="tools" id="toolGrid"></div>
+  </section>
+
+  <section class="workspace" id="workspace">
+    <button class="back" onclick="showHome()">← Back to Home</button>
+    <h2 id="workspaceTitle">AI Chat</h2>
+    <p id="workspaceDescription">Ask questions and explore ideas.</p>
+    <div class="chat-area" id="chatArea">
+      <div class="message ai">Welcome to QAVORA AI! How can I help you today?</div>
+    </div>
+    <div class="chat-controls">
+      <input id="chatInput" placeholder="Write your message..."
+      onkeydown="if(event.key==='Enter')sendMessage()">
+      <button class="primary" onclick="sendMessage()">Send</button>
+    </div>
+  </section>
+
+  <footer>
+    QAVORA AI · Think Beyond. Create Without Limits.<br>
+    Founded by Kafiya · Founder & CEO
+  </footer>
+</main>
+</div>
+
+<script>
+const features = [
+ ["✦","AI Chat","Ask questions and solve everyday problems."],
+ ["🔬","Deep Research Pro","Explore topics and organize research."],
+ ["📄","PDF Brain","Analyze documents and extract information."],
+ ["🌐","Web Search AI","Explore information from the web."],
+ ["📊","Data Intelligence","Analyze data and discover insights."],
+ ["◇","AI Agent Studio","Create intelligent task workflows."],
+ ["⚡","Task Automation","Plan and automate repetitive tasks."],
+ ["✍️","Writing Studio","Create and improve written content."],
+ ["⌨️","Coding Studio","Write, debug and understand code."],
+ ["🎨","Image Studio","Create original visual ideas."],
+ ["🎙️","Voice AI","Interact using voice."],
+ ["📽️","Presentation Studio","Plan and create presentations."],
+ ["🌍","Language Intelligence","Translate and learn languages."],
+ ["📚","Knowledge Library","Organize your knowledge."],
+ ["🗂️","Project Workspace","Keep projects organized."],
+ ["🧠","Personal AI Memory","Save preferences with permission."],
+ ["✓","Fact Checker","Check claims against available sources."],
+ ["⌕","Smart Search","Search across your workspace."]
+];
+
+const grid = document.getElementById("toolGrid");
+features.forEach(f=>{
+ const card=document.createElement("div");
+ card.className="tool";
+ card.innerHTML=`
+ <div class="tool-icon">${f[0]}</div>
+ <h3>${f[1]}</h3>
+ <p>${f[2]}</p>
+ <div class="status">EXPLORE MODULE →</div>`;
+ card.onclick=()=>openFeature(f[1]);
+ grid.appendChild(card);
+});
+
+function showHome(){
+ document.getElementById("home").style.display="block";
+ document.getElementById("workspace").classList.remove("show");
+}
+function showTools(){showHome();document.getElementById("toolGrid").scrollIntoView({behavior:"smooth"});}
+function openChat(){
+ document.getElementById("home").style.display="none";
+ document.getElementById("workspace").classList.add("show");
+ document.getElementById("workspaceTitle").textContent="QAVORA AI Chat";
+ document.getElementById("workspaceDescription").textContent="Ask questions and explore ideas.";
+}
+function openFeature(name){
+ document.getElementById("home").style.display="none";
+ document.getElementById("workspace").classList.add("show");
+ document.getElementById("workspaceTitle").textContent=name;
+ document.getElementById("workspaceDescription").textContent=
+ "This module is part of the QAVORA AI roadmap. Its full capabilities are being developed.";
+ document.getElementById("chatArea").innerHTML=
+ '<div class="message ai">'+name+' selected. Ask QAVORA how this module can help you plan your work.</div>';
+}
+function askMain(){
+ const input=document.getElementById("mainQuestion");
+ const question=input.value.trim();
+ if(!question)return;
+ openChat();
+ document.getElementById("chatInput").value=question;
+ input.value="";
+ sendMessage();
+}
+function addMessage(text,type){
+ const area=document.getElementById("chatArea");
+ const msg=document.createElement("div");
+ msg.className="message "+type;
+ msg.textContent=text;
+ area.appendChild(msg);
+ area.scrollTop=area.scrollHeight;
+}
+async function sendMessage(){
+ const input=document.getElementById("chatInput");
+ const question=input.value.trim();
+ if(!question)return;
+ input.value="";
+ addMessage(question,"user");
+ const loading=document.createElement("div");
+ loading.className="message ai";
+ loading.textContent="QAVORA is thinking...";
+ document.getElementById("chatArea").appendChild(loading);
+
+ try{
+   const client=window.qavoraSupabase;
+   if(!client)throw new Error("Supabase connection is not ready. Check supabase.js.");
+   const {data,error}=await client.functions.invoke("smooth-function",{
+     body:{message:question}
+   });
+   if(error)throw error;
+   if(!data || !data.answer)throw new Error("No answer received.");
+   loading.textContent=data.answer;
+ }catch(err){
+   console.error(err);
+   loading.textContent="Sorry, QAVORA could not respond. Please try again.";
+ }
+}
+async function googleLogin(){
+ const client=window.qavoraSupabase;
+ if(!client){alert("Supabase connection is not ready.");return;}
+ const {error}=await client.auth.signInWithOAuth({
+   provider:"google",
+   options:{
+     redirectTo:window.location.origin+window.location.pathname
+   }
+ });
+ if(error)alert(error.message);
+}
+async function logout(){
+ const client=window.qavoraSupabase;
+ if(!client)return;
+ const {error}=await client.auth.signOut();
+ if(error)alert(error.message);
+}
+async function updateAccount(){
+ const client=window.qavoraSupabase;
+ if(!client)return;
+ const {data}=await client.auth.getSession();
+ const user=data?.session?.user;
+ document.getElementById("accountStatus").textContent=
+ user ? (user.email || "Signed in") : "Sign in to access your workspace.";
+ document.getElementById("googleButton").style.display=user?"none":"block";
+ document.getElementById("logoutButton").style.display=user?"block":"none";
+}
+if(window.qavoraSupabase){
+ updateAccount();
+ window.qavoraSupabase.auth.onAuthStateChange(()=>updateAccount());
+}
+</script>
+</body>
+                         </html>
+
