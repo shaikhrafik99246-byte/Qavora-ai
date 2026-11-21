@@ -1,1 +1,776 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080914">
+<title>QAVORA AI — Think Beyond</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<style>
+:root{
+  --bg:#080914;
+  --panel:#111326;
+  --panel2:#191c35;
+  --purple:#9565ff;
+  --blue:#4388ff;
+  --cyan:#38d9e6;
+  --text:#f7f7ff;
+  --muted:#9ba0bd;
+  --border:rgba(255,255,255,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  min-height:100vh;
+}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.6;cursor:not-allowed}
+
+header{
+  min-height:72px;
+  padding:12px 6%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(8,9,20,.96);
+  backdrop-filter:blur(16px);
+}
+.logo{font-size:24px;font-weight:800;letter-spacing:2px}
+.logo span{color:var(--purple)}
+nav{display:flex;gap:25px;align-items:center}
+nav a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+  cursor:pointer;
+}
+nav a:hover{color:white}
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:12px 19px;
+  color:white;
+  font-weight:700;
+  background:linear-gradient(110deg,var(--purple),var(--blue));
+}
+.btn:hover{filter:brightness(1.13)}
+.menu-btn{
+  display:none;
+  background:none;
+  color:white;
+  border:0;
+  font-size:25px;
+}
+
+main{max-width:1250px;margin:auto;padding:35px 5% 70px}
+section{scroll-margin-top:100px}
+
+.hero{text-align:center;padding:65px 10px 55px}
+.eyebrow{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:bold;
+  letter-spacing:3px;
+  margin-bottom:22px;
+}
+.hero h1{font-size:clamp(38px,7vw,68px);line-height:1.12}
+.hero h1 span{
+  background:linear-gradient(90deg,#a78bfa,#55b9ff,#42e4e1);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.hero p{
+  color:var(--muted);
+  max-width:650px;
+  margin:20px auto 28px;
+  line-height:1.8;
+}
+.search-box{
+  max-width:720px;
+  margin:30px auto 0;
+  padding:8px;
+  display:flex;
+  gap:8px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:15px;
+}
+.search-box input{
+  flex:1;
+  min-width:0;
+  background:transparent;
+  border:0;
+  outline:0;
+  color:white;
+  padding:13px;
+}
+
+.section-head{margin:45px 0 22px}
+.section-head h2{font-size:27px;margin-bottom:9px}
+.section-head p{color:var(--muted);font-size:14px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:17px;
+}
+.card{
+  background:linear-gradient(145deg,var(--panel),#101225);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:22px;
+  transition:.25s;
+  min-height:175px;
+}
+.card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(149,101,255,.55);
+}
+.card-icon{font-size:27px;margin-bottom:15px}
+.card h3{font-size:17px;margin-bottom:9px}
+.card p{font-size:13px;color:var(--muted);line-height:1.6}
+.status{
+  display:inline-block;
+  margin-top:15px;
+  font-size:10px;
+  letter-spacing:1px;
+  color:#68e8b2;
+  font-weight:bold;
+}
+.status.soon{color:#b9a3ff}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:25px;
+  margin-top:25px;
+}
+.chat-layout{max-width:850px;margin:auto}
+.chat-messages{
+  height:350px;
+  overflow-y:auto;
+  padding:15px 4px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.message{
+  max-width:85%;
+  padding:13px 16px;
+  border-radius:14px;
+  line-height:1.6;
+  font-size:14px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+.message.user{
+  align-self:flex-end;
+  background:linear-gradient(120deg,#6546c9,#376bc8);
+}
+.message.ai{
+  align-self:flex-start;
+  background:var(--panel2);
+  border:1px solid var(--border);
+}
+.chat-input{
+  display:flex;
+  gap:9px;
+  border-top:1px solid var(--border);
+  padding-top:17px;
+}
+.chat-input textarea{
+  flex:1;
+  resize:vertical;
+  min-height:48px;
+  max-height:130px;
+  background:#090b19;
+  color:white;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:14px;
+  outline:none;
+}
+.chat-input textarea:focus{border-color:var(--purple)}
+
+.account-box{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.avatar{
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  object-fit:cover;
+  background:var(--panel2);
+  border:2px solid var(--purple);
+}
+.account-info{flex:1;min-width:180px}
+.account-info p{color:var(--muted);font-size:13px;margin-top:7px}
+.google-btn{
+  background:white;
+  color:#222;
+  border:0;
+  padding:13px 18px;
+  border-radius:10px;
+  font-weight:bold;
+}
+.hidden{display:none!important}
+.notice{color:var(--muted);font-size:12px;margin-top:12px}
+.error-text{color:#ff9292}
+.success-text{color:#68e8b2}
+
+footer{
+  border-top:1px solid var(--border);
+  padding:30px 5%;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  line-height:2;
+}
+
+@media(max-width:800px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  nav{gap:14px}
+}
+@media(max-width:560px){
+  header{padding:12px 5%}
+  .logo{font-size:20px}
+  nav{
+    display:none;
+    position:absolute;
+    top:68px;
+    left:0;
+    right:0;
+    background:#111326;
+    padding:22px;
+    flex-direction:column;
+    align-items:flex-start;
+    border-bottom:1px solid var(--border);
+  }
+  nav.open{display:flex}
+  .menu-btn{display:block}
+  header>.btn{display:none}
+  main{padding:20px 5% 50px}
+  .hero{padding:55px 5px 35px}
+  .grid{grid-template-columns:1fr}
+  .search-box{flex-direction:column}
+  .search-box .btn{width:100%}
+  .chat-input{flex-direction:column}
+  .chat-input .btn{width:100%}
+  .account-box{align-items:flex-start}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">QAVORA<span> AI</span></div>
+
+  <nav id="navigation">
+    <a onclick="goTo('home')">Home</a>
+    <a onclick="goTo('tools')">Tools</a>
+    <a onclick="goTo('chat')">Chat</a>
+    <a onclick="goTo('account')">Account</a>
+    <a onclick="goTo('about')">About</a>
+  </nav>
+
+  <button class="btn" onclick="goTo('account')">Get Started</button>
+  <button class="menu-btn" onclick="toggleMenu()">☰</button>
+</header>
+
+<main>
+
+<section class="hero" id="home">
+  <div class="eyebrow">YOUR INTELLIGENT AI WORKSPACE</div>
+
+  <h1>Think Beyond.<br>
+    <span>Create Without Limits.</span>
+  </h1>
+
+  <p>
+    Explore ideas, solve problems, research topics and create
+    with QAVORA AI — your intelligent digital workspace.
+  </p>
+
+  <div class="search-box">
+    <input id="exploreInput"
+      placeholder="Ask anything or explore an idea..."
+      onkeydown="if(event.key==='Enter')exploreIdea()">
+    <button class="btn" onclick="exploreIdea()">Explore</button>
+  </div>
+</section>
+
+<section id="tools">
+  <div class="section-head">
+    <h2>Explore AI Tools</h2>
+    <p>One workspace. Multiple possibilities.</p>
+  </div>
+  <div class="grid" id="toolGrid"></div>
+</section>
+
+<section id="chat">
+  <div class="section-head">
+    <h2>QAVORA AI Chat</h2>
+    <p>Start a conversation with your AI workspace.</p>
+  </div>
+
+  <div class="panel chat-layout">
+    <div class="chat-messages" id="chatMessages">
+      <div class="message ai">
+        Hello! Welcome to QAVORA AI. What would you like to explore today?
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <textarea id="chatInput"
+        placeholder="Write your question here..."
+        rows="2"
+        onkeydown="handleChatKey(event)"></textarea>
+      <button class="btn" id="sendBtn" onclick="sendMessage()">Send ↑</button>
+    </div>
+
+    <p class="notice" id="chatStatus">QAVORA AI is ready.</p>
+  </div>
+</section>
+
+<section id="account">
+  <div class="section-head">
+    <h2>Your QAVORA Account</h2>
+    <p>Access your personal workspace.</p>
+  </div>
+
+  <div class="panel">
+    <div id="loggedOut">
+      <h3>Welcome to QAVORA</h3>
+      <p class="notice">Continue securely with your Google account.</p>
+      <br>
+      <button class="google-btn" id="googleBtn" onclick="googleLogin()">
+        Continue with Google
+      </button>
+      <p class="notice" id="authStatus">Checking account connection...</p>
+    </div>
+
+    <div id="loggedIn" class="hidden">
+      <div class="account-box">
+        <img id="userAvatar" class="avatar" alt="Profile picture">
+        <div class="account-info">
+          <h3 id="userName">Your Account</h3>
+          <p id="userEmail"></p>
+          <p id="profileStatus"></p>
+        </div>
+        <button class="btn" id="signOutBtn" onclick="signOut()">Sign Out</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-head">
+    <h2>About QAVORA AI</h2>
+    <p>Technology designed to expand what you can do.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Think Beyond. Create Without Limits.</h3>
+    <p class="notice" style="font-size:14px;line-height:1.9">
+      QAVORA AI is an evolving intelligent AI workspace
+      developed under Rockstar Technologies.
+      Its vision is to bring research, productivity,
+      creativity and problem-solving experiences together
+      in one place.
+      <br><br>
+      Founder & CEO: Kafiya
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <strong>QAVORA AI</strong><br>
+  Think Beyond. Create Without Limits.<br>
+  A product of Rockstar Technologies.
+</footer>
+
+<script>
+
+// =====================================
+// TOOLS
+// =====================================
+
+const tools = [
+  ["✦","AI Chat","Ask questions and get intelligent answers.","AVAILABLE"],
+  ["🔬","Deep Research Pro","Explore topics through detailed research.","ROADMAP"],
+  ["📄","PDF Brain","Understand and work with PDF documents.","ROADMAP"],
+  ["🌐","Web Search AI","Discover information across the web.","ROADMAP"],
+  ["📊","Data Intelligence","Analyze data and discover insights.","ROADMAP"],
+  ["🧠","Smart Analysis","Break down complex problems.","ROADMAP"],
+  ["🤖","AI Agent Studio","Build intelligent AI agent experiences.","ROADMAP"],
+  ["⚡","Task Automation","Plan and automate repetitive tasks.","ROADMAP"],
+  ["✍️","Writing Studio","Create and improve written content.","ROADMAP"],
+  ["💻","Coding Studio","Explore code and programming ideas.","ROADMAP"],
+  ["🎨","Image Studio","Create visual ideas with AI.","ROADMAP"],
+  ["🎙️","Voice AI","Explore voice-based AI experiences.","ROADMAP"],
+  ["📽️","Presentation Studio","Plan and create presentations.","ROADMAP"],
+  ["🌍","Language Intelligence","Work across different languages.","ROADMAP"],
+  ["📚","Knowledge Library","Organize useful information.","ROADMAP"],
+  ["🗂️","Project Workspace","Manage ideas and projects.","ROADMAP"],
+  ["🧩","Personal AI Memory","Build a personalized workspace.","ROADMAP"],
+  ["🔎","Fact Checker","Review claims and information.","ROADMAP"]
+];
+
+const toolGrid=document.getElementById("toolGrid");
+
+tools.forEach((tool,index)=>{
+  const card=document.createElement("div");
+  card.className="card";
+
+  const icon=document.createElement("div");
+  icon.className="card-icon";
+  icon.textContent=tool[0];
+
+  const title=document.createElement("h3");
+  title.textContent=tool[1];
+
+  const description=document.createElement("p");
+  description.textContent=tool[2];
+
+  const status=document.createElement("span");
+  status.className="status";
+  if(tool[3]==="ROADMAP")status.classList.add("soon");
+  status.textContent=tool[3];
+
+  card.append(icon,title,description,status);
+
+  if(index===0){
+    card.style.cursor="pointer";
+    card.onclick=()=>goTo("chat");
+  }
+
+  toolGrid.appendChild(card);
+});
+
+// =====================================
+// NAVIGATION
+// =====================================
+
+function goTo(id){
+  document.getElementById(id).scrollIntoView({behavior:"smooth"});
+  document.getElementById("navigation").classList.remove("open");
+}
+
+function toggleMenu(){
+  document.getElementById("navigation").classList.toggle("open");
+}
+
+function exploreIdea(){
+  const value=document.getElementById("exploreInput").value.trim();
+  if(!value)return;
+  document.getElementById("chatInput").value=value;
+  goTo("chat");
+  sendMessage();
+}
+
+// =====================================
+// CHAT
+// =====================================
+
+function addMessage(text,type){
+  const messages=document.getElementById("chatMessages");
+  const bubble=document.createElement("div");
+  bubble.className="message "+type;
+  bubble.textContent=text;
+  messages.appendChild(bubble);
+  messages.scrollTop=messages.scrollHeight;
+  return bubble;
+}
+
+function handleChatKey(event){
+  if(event.key==="Enter"&&!event.shiftKey){
+    event.preventDefault();
+    sendMessage();
+  }
+}
+
+async function sendMessage(){
+  const input=document.getElementById("chatInput");
+  const button=document.getElementById("sendBtn");
+  const status=document.getElementById("chatStatus");
+  const question=input.value.trim();
+
+  if(!question)return;
+
+  const client=window.qavoraSupabase;
+
+  if(!client){
+    status.textContent="Supabase client is not initialized.";
+    status.className="notice error-text";
+    return;
+  }
+
+  addMessage(question,"user");
+  input.value="";
+  button.disabled=true;
+  button.textContent="Thinking...";
+  status.textContent="QAVORA AI is thinking...";
+
+  const loading=addMessage("Generating your answer...","ai");
+
+  try{
+    const {data,error}=await client.functions.invoke(
+      "dynamic-processor",
+      {body:{message:question}}
+    );
+
+    if(error)throw error;
+    if(!data||!data.answer){
+      throw new Error("AI response was not received.");
+    }
+
+    loading.textContent=data.answer;
+    status.textContent="Response generated successfully.";
+    status.className="notice success-text";
+
+  }catch(error){
+    console.error("QAVORA Chat Error:",error);
+    loading.textContent="Sorry, something went wrong. Please try again.";
+    status.textContent="Chat error: "+(error.message||"Request failed");
+    status.className="notice error-text";
+
+  }finally{
+    button.disabled=false;
+    button.textContent="Send ↑";
+    input.focus();
+  }
+}
+
+// =====================================
+// GOOGLE LOGIN
+// =====================================
+
+async function googleLogin(){
+  const client=window.qavoraSupabase;
+  const status=document.getElementById("authStatus");
+  const button=document.getElementById("googleBtn");
+
+  if(!client){
+    status.textContent="Supabase connection is not available.";
+    status.className="notice error-text";
+    return;
+  }
+
+  button.disabled=true;
+  status.textContent="Connecting to Google...";
+  status.className="notice";
+
+  try{
+    const {error}=await client.auth.signInWithOAuth({
+      provider:"google",
+      options:{
+        redirectTo:window.location.origin+window.location.pathname
+      }
+    });
+
+    if(error)throw error;
+
+  }catch(error){
+    console.error("Google Login Error:",error);
+    status.textContent="Login error: "+error.message;
+    status.className="notice error-text";
+    button.disabled=false;
+  }
+}
+
+// =====================================
+// ACCOUNT DISPLAY
+// =====================================
+
+function showLoggedOut(){
+  document.getElementById("loggedIn").classList.add("hidden");
+  document.getElementById("loggedOut").classList.remove("hidden");
+  document.getElementById("googleBtn").disabled=false;
+}
+
+async function updateAccount(user){
+  if(!user)return;
+
+  document.getElementById("loggedOut").classList.add("hidden");
+  document.getElementById("loggedIn").classList.remove("hidden");
+
+  const metadata=user.user_metadata||{};
+  const name=metadata.full_name||metadata.name||user.email||"QAVORA User";
+  const avatar=metadata.avatar_url||metadata.picture||"";
+
+  document.getElementById("userName").textContent=name;
+  document.getElementById("userEmail").textContent=user.email||"";
+
+  const avatarElement=document.getElementById("userAvatar");
+
+  if(avatar){
+    avatarElement.src=avatar;
+    avatarElement.classList.remove("hidden");
+  }else{
+    avatarElement.removeAttribute("src");
+    avatarElement.classList.add("hidden");
+  }
+
+  const profileStatus=document.getElementById("profileStatus");
+  profileStatus.textContent="Saving your profile...";
+  profileStatus.className="notice";
+
+  const client=window.qavoraSupabase;
+
+  try{
+    const {error}=await client.from("qavora_profiles").upsert({
+      id:user.id,
+      display_name:name,
+      avatar_url:avatar||null,
+      updated_at:new Date().toISOString()
+    },{onConflict:"id"});
+
+    if(error)throw error;
+
+    profileStatus.textContent="Your profile is connected.";
+    profileStatus.className="notice success-text";
+
+  }catch(error){
+    console.error("Profile Save Error:",error);
+    profileStatus.textContent="Profile save issue: "+error.message;
+    profileStatus.className="notice error-text";
+  }
+}
+
+// =====================================
+// SESSION AND AUTH INITIALIZATION
+// =====================================
+
+let activeUserId=null;
+
+async function handleSession(session){
+  if(session&&session.user){
+    const user=session.user;
+
+    if(activeUserId===user.id)return;
+
+    activeUserId=user.id;
+    await updateAccount(user);
+
+  }else{
+    activeUserId=null;
+    showLoggedOut();
+  }
+}
+
+async function initializeAccount(){
+  const client=window.qavoraSupabase;
+  const status=document.getElementById("authStatus");
+
+  if(!client){
+    status.textContent="Supabase connection is not available. Check supabase.js.";
+    status.className="notice error-text";
+    return;
+  }
+
+  status.textContent="Checking saved login session...";
+
+  // Listen for authentication changes.
+  client.auth.onAuthStateChange((event,session)=>{
+    console.log("QAVORA AUTH EVENT:",event);
+    console.log("QAVORA SESSION:",session);
+
+    if(event==="SIGNED_IN"){
+      status.textContent="Google login successful. Loading your account...";
+    }else if(event==="SIGNED_OUT"){
+      status.textContent="You are signed out.";
+    }else if(event==="TOKEN_REFRESHED"){
+      console.log("QAVORA token refreshed.");
+    }
+
+    setTimeout(()=>{
+      handleSession(session);
+    },0);
+  });
+
+  // Check existing session.
+  try{
+    const {data,error}=await client.auth.getSession();
+
+    console.log("QAVORA GET SESSION:",data);
+    console.log("QAVORA AUTH ERROR:",error);
+
+    if(error)throw error;
+
+    if(data.session){
+      status.textContent="Login session found. Loading your account...";
+      await handleSession(data.session);
+    }else{
+      status.textContent="No saved login session found. Google login is available.";
+      showLoggedOut();
+    }
+
+  }catch(error){
+    console.error("QAVORA SESSION ERROR:",error);
+
+    status.textContent="Session error: "+error.message;
+    status.className="notice error-text";
+    showLoggedOut();
+  }
+}
+
+// =====================================
+// SIGN OUT
+// =====================================
+
+async function signOut(){
+  const client=window.qavoraSupabase;
+  const status=document.getElementById("authStatus");
+
+  if(!client)return;
+
+  const button=document.getElementById("signOutBtn");
+  button.disabled=true;
+
+  try{
+    const {error}=await client.auth.signOut();
+    if(error)throw error;
+
+    activeUserId=null;
+    showLoggedOut();
+    status.textContent="You have signed out successfully.";
+    status.className="notice success-text";
+
+  }catch(error){
+    console.error("QAVORA Sign Out Error:",error);
+    status.textContent="Sign out error: "+error.message;
+    status.className="notice error-text";
+
+  }finally{
+    button.disabled=false;
+  }
+}
+
+// Start account system.
+initializeAccount();
+
+</script>
+
+</body>
+  </html>
+    
